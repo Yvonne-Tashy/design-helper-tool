@@ -1,0 +1,721 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Design Helper Tool</title>
+    <style>
+        :root{
+            --bg0:#070A13;
+            --bg1:#0B1023;
+            --surface:#0E1836;
+            --surface2:#111E45;
+            --text:#EAF0FF;
+            --muted:#A9B7E6;
+            --line:rgba(255,255,255,.10);
+            --shadow:0 12px 40px rgba(0,0,0,.35);
+            --accent:#7C3AED;
+            --accent2:#22D3EE;
+            --good:#22C55E;
+            --bad:#EF4444;
+            --radius:16px;
+            --radius2:12px;
+            --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family:var(--font);
+            color:var(--text);
+            background:
+                radial-gradient(1200px 600px at 15% 5%, rgba(124,58,237,.28), transparent 60%),
+                radial-gradient(1000px 600px at 85% 10%, rgba(34,211,238,.22), transparent 55%),
+                linear-gradient(180deg, var(--bg0), var(--bg1));
+        }
+        a{color:inherit}
+        .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+        .topbar{
+            display:flex;align-items:center;justify-content:space-between;
+            gap:16px;margin-bottom:18px
+        }
+        .brand{display:flex;align-items:center;gap:12px}
+        .logo{
+            width:40px;height:40px;border-radius:12px;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            box-shadow:0 8px 22px rgba(124,58,237,.25);
+            position:relative;overflow:hidden
+        }
+        .logo:after{
+            content:"";position:absolute;inset:-18px;
+            background:radial-gradient(circle at 35% 35%, rgba(255,255,255,.55), transparent 45%);
+            transform:rotate(12deg)
+        }
+        .title h1{font-size:16px;letter-spacing:.2px;margin:0;font-weight:700}
+        .title p{margin:2px 0 0;color:var(--muted);font-size:13px}
+        .pill{
+            font-size:12px;color:var(--muted);
+            border:1px solid var(--line);
+            background:rgba(255,255,255,.04);
+            padding:8px 10px;border-radius:999px;
+            display:flex;align-items:center;gap:8px;white-space:nowrap
+        }
+        .dot{width:8px;height:8px;border-radius:99px;background:var(--good);box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+        .grid{
+            display:grid;
+            grid-template-columns: 430px 1fr;
+            gap:18px;
+            align-items:start
+        }
+        @media (max-width: 980px){
+            .grid{grid-template-columns:1fr}
+        }
+        .card{
+            border:1px solid var(--line);
+            background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            overflow:hidden
+        }
+        .card .hd{
+            padding:16px 16px 12px;
+            border-bottom:1px solid var(--line);
+            display:flex;align-items:flex-start;justify-content:space-between;gap:12px
+        }
+        .card .hd h2{
+            margin:0;font-size:14px;font-weight:700;letter-spacing:.2px
+        }
+        .card .hd p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.35}
+        .card .bd{padding:16px}
+        label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+        input[type="text"], select, textarea{
+            width:100%;
+            border:1px solid var(--line);
+            background:rgba(10,16,36,.6);
+            color:var(--text);
+            border-radius:12px;
+            padding:12px 12px;
+            outline:none;
+            transition:border-color .18s ease, transform .18s ease
+        }
+        textarea{min-height:92px;resize:vertical}
+        input[type="text"]:focus, select:focus, textarea:focus{
+            border-color:rgba(124,58,237,.55);
+            box-shadow:0 0 0 4px rgba(124,58,237,.18)
+        }
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        @media (max-width: 520px){.row{grid-template-columns:1fr}}
+        .stack{display:flex;flex-direction:column;gap:12px}
+        .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+        .btn{
+            appearance:none;border:1px solid var(--line);
+            background:rgba(255,255,255,.06);
+            color:var(--text);
+            padding:11px 14px;border-radius:12px;
+            font-weight:650;font-size:13px;
+            cursor:pointer;
+            transition:transform .12s ease, background .12s ease, border-color .12s ease
+        }
+        .btn:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.18)}
+        .btn:active{transform:translateY(0px)}
+        .btn.primary{
+            border-color:rgba(124,58,237,.55);
+            background:linear-gradient(135deg, rgba(124,58,237,.98), rgba(34,211,238,.62));
+        }
+        .btn.ghost{background:transparent}
+        .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+        .upload{
+            border:1px dashed rgba(255,255,255,.18);
+            border-radius:14px;
+            background:rgba(255,255,255,.03);
+            padding:14px;
+            display:flex;align-items:center;justify-content:space-between;gap:14px
+        }
+        .upload .meta{display:flex;flex-direction:column;gap:2px}
+        .upload strong{font-size:13.5px}
+        .upload small{color:var(--muted);font-size:12px;line-height:1.2}
+        .upload input{display:none}
+        .hint{margin:10px 0 0;color:var(--muted);font-size:12px;line-height:1.4}
+        .sugs{display:flex;flex-direction:column;gap:10px}
+        .sug{
+            border:1px solid var(--line);
+            border-radius:14px;
+            background:rgba(255,255,255,.03);
+            padding:12px;
+            display:grid;grid-template-columns:1fr auto;gap:10px
+        }
+        .sug h3{margin:0;font-size:13.5px;font-weight:750}
+        .sug p{margin:6px 0 0;color:var(--muted);font-size:12.5px;line-height:1.35}
+        .sug .ctl{display:flex;align-items:flex-start;gap:8px}
+        .toggle{
+            width:44px;height:26px;border-radius:999px;
+            border:1px solid var(--line);
+            background:rgba(255,255,255,.05);
+            position:relative;cursor:pointer;flex:0 0 auto;margin-top:2px
+        }
+        .toggle span{
+            width:20px;height:20px;border-radius:999px;
+            background:rgba(255,255,255,.70);
+            position:absolute;top:2px;left:2px;
+            transition:transform .14s ease, background .14s ease
+        }
+        .toggle[data-on="1"]{
+            border-color:rgba(34,211,238,.55);
+            background:rgba(34,211,238,.18)
+        }
+        .toggle[data-on="1"] span{transform:translateX(18px);background:#EAFDFF}
+        .vote{display:flex;gap:8px;align-items:center;margin-top:8px}
+        .iconbtn{
+            border:1px solid var(--line);
+            background:rgba(255,255,255,.04);
+            color:var(--muted);
+            border-radius:10px;
+            padding:6px 10px;
+            font-size:12px;
+            cursor:pointer
+        }
+        .iconbtn[data-on="1"]{color:var(--text);border-color:rgba(255,255,255,.22)}
+        .compare{
+            display:grid;grid-template-columns:1fr 1fr;gap:14px
+        }
+        @media (max-width: 980px){.compare{grid-template-columns:1fr}}
+        .frame{
+            border:1px solid var(--line);
+            border-radius:16px;
+            background:rgba(255,255,255,.02);
+            overflow:hidden;
+            display:flex;flex-direction:column
+        }
+        .frame .fh{
+            padding:12px 12px;
+            border-bottom:1px solid var(--line);
+            display:flex;align-items:center;justify-content:space-between
+        }
+        .frame .fh strong{font-size:13px}
+        .badge{
+            font-size:11px;
+            color:var(--muted);
+            padding:6px 8px;
+            border-radius:999px;
+            border:1px solid var(--line);
+            background:rgba(255,255,255,.03)
+        }
+        .canvasWrap{
+            padding:12px;
+            display:flex;align-items:center;justify-content:center;
+            min-height:320px
+        }
+        .canvasWrap canvas, .canvasWrap img{
+            max-width:100%;
+            height:auto;
+            border-radius:14px;
+            border:1px solid rgba(255,255,255,.10);
+            background:rgba(0,0,0,.18)
+        }
+        .emptyState{
+            color:var(--muted);
+            font-size:13px;
+            line-height:1.35;
+            text-align:center;
+            max-width:420px
+        }
+        .kpi{
+            display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-top:14px
+        }
+        @media (max-width: 520px){.kpi{grid-template-columns:1fr}}
+        .kpi .box{
+            border:1px solid var(--line);
+            border-radius:14px;
+            padding:12px;
+            background:rgba(255,255,255,.03)
+        }
+        .kpi .box strong{display:block;font-size:12.5px}
+        .kpi .box span{display:block;margin-top:6px;color:var(--muted);font-size:12px;line-height:1.25}
+        .toast{
+            position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+            border:1px solid var(--line);
+            background:rgba(7,10,19,.86);
+            backdrop-filter:blur(10px);
+            color:var(--text);
+            padding:10px 12px;border-radius:14px;
+            box-shadow:var(--shadow);
+            font-size:12.5px;
+            opacity:0;pointer-events:none;
+            transition:opacity .18s ease, transform .18s ease
+        }
+        .toast[data-show="1"]{opacity:1;transform:translateX(-50%) translateY(-4px)}
+        .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div class="brand">
+                <div class="logo" aria-hidden="true"></div>
+                <div class="title">
+                    <h1>Design Helper Tool</h1>
+                    <p>Analyze, improve, and learn with before/after comparison</p>
+                </div>
+            </div>
+            <div class="pill">
+                <span class="dot" aria-hidden="true"></span>
+                <span>Ready to embed inside your dashboard</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="hd">
+                    <div>
+                        <h2>1) Upload or start</h2>
+                        <p>Upload a design screenshot, then describe the goal, audience, and style.</p>
+                    </div>
+                </div>
+                <div class="bd">
+                    <div class="stack">
+                        <div class="upload">
+                            <div class="meta">
+                                <strong id="uploadTitle">Design screenshot (optional)</strong>
+                                <small id="uploadSub">PNG/JPG recommended. Stays in your browser.</small>
+                            </div>
+                            <div>
+                                <label class="btn" for="fileInput">Choose file</label>
+                                <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div>
+                                <label for="audience">Audience</label>
+                                <input id="audience" type="text" placeholder="e.g., founders, marketers, clients" />
+                            </div>
+                            <div>
+                                <label for="style">Style</label>
+                                <select id="style">
+                                    <option value="Modern">Modern</option>
+                                    <option value="Minimal">Minimal</option>
+                                    <option value="Bold">Bold</option>
+                                    <option value="Editorial">Editorial</option>
+                                    <option value="Playful">Playful</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="goal">Design goal</label>
+                            <textarea id="goal" placeholder="What should this design achieve? (conversion, clarity, trust, signups, etc.)"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="cta">Primary CTA text</label>
+                            <input id="cta" type="text" placeholder="e.g., Create template, Save & publish, Start free trial" />
+                        </div>
+
+                        <div class="btnrow">
+                            <button class="btn primary" id="analyzeBtn">Analyze & improve</button>
+                            <button class="btn ghost" id="resetBtn" type="button">Reset</button>
+                        </div>
+
+                        <div class="hint">
+                            Suggestions include the reason (why it works) and an “Apply” toggle. For images, the “After” panel uses visual adjustments to simulate improvements.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="hd">
+                    <div>
+                        <h2>2) Suggestions + before/after</h2>
+                        <p>Apply improvements and compare side by side.</p>
+                    </div>
+                    <span class="badge" id="statusBadge">Waiting</span>
+                </div>
+                <div class="bd">
+                    <div class="compare">
+                        <div class="frame">
+                            <div class="fh">
+                                <strong>Before</strong>
+                                <span class="badge" id="beforeBadge">Original</span>
+                            </div>
+                            <div class="canvasWrap" id="beforeWrap">
+                                <div class="emptyState">
+                                    Upload a screenshot to see true before/after. Without one, you can still generate suggestions and learn from them.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="frame">
+                            <div class="fh">
+                                <strong>After</strong>
+                                <span class="badge" id="afterBadge">Improved</span>
+                            </div>
+                            <div class="canvasWrap" id="afterWrap">
+                                <div class="emptyState">
+                                    The improved preview appears here after you run analysis and apply changes.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kpi" id="kpiRow" style="display:none">
+                        <div class="box">
+                            <strong>Image brightness</strong>
+                            <span id="kpiBrightness">—</span>
+                        </div>
+                        <div class="box">
+                            <strong>Image contrast</strong>
+                            <span id="kpiContrast">—</span>
+                        </div>
+                        <div class="box">
+                            <strong>Applied changes</strong>
+                            <span id="kpiApplied">—</span>
+                        </div>
+                    </div>
+
+                    <div style="height:14px"></div>
+
+                    <div class="sugs" id="sugs">
+                        <div class="emptyState" style="max-width:none;text-align:left">
+                            Run analysis to generate contextual suggestions with explanations.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        const CSRF = "5471f2c0203d06a5aeb6eb6a62b4bc9344adb58af3fca83d07b0040f4c662319";
+
+        const state = {
+            file: null,
+            image: null,
+            stats: null,
+            suggestions: [],
+            enabled: new Map(),
+            filter: { brightness: 1, contrast: 1, saturate: 1, sharpness: 0 },
+            ui: { headlineScale: 1, bodyScale: 1, spacingScale: 1, ctaEmphasis: 0, minTap: 44, focusRing: true }
+        };
+
+        const el = (id) => document.getElementById(id);
+        const statusBadge = el('statusBadge');
+        const sugs = el('sugs');
+        const fileInput = el('fileInput');
+        const analyzeBtn = el('analyzeBtn');
+        const resetBtn = el('resetBtn');
+        const toast = el('toast');
+        const beforeWrap = el('beforeWrap');
+        const afterWrap = el('afterWrap');
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.dataset.show = '1';
+            window.clearTimeout(showToast._t);
+            showToast._t = window.setTimeout(() => { toast.dataset.show = '0'; }, 2200);
+        }
+
+        function setStatus(text) {
+            statusBadge.textContent = text;
+        }
+
+        function computeImageStats(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const maxSide = 540;
+            const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+            canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+            canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+            let sumLum = 0;
+            const lum = new Float32Array(Math.floor(data.length / 4));
+            let j = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i] / 255;
+                const g = data[i + 1] / 255;
+                const b = data[i + 2] / 255;
+                const y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                lum[j++] = y;
+                sumLum += y;
+            }
+            const mean = sumLum / lum.length;
+            let variance = 0;
+            for (let i = 0; i < lum.length; i++) {
+                const d = lum[i] - mean;
+                variance += d * d;
+            }
+            variance = variance / lum.length;
+            const std = Math.sqrt(variance);
+
+            return {
+                brightness: clamp(mean, 0, 1),
+                contrast: clamp(std / 0.29, 0, 1)
+            };
+        }
+
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+        function renderBefore(img) {
+            beforeWrap.innerHTML = '';
+            const imgEl = document.createElement('img');
+            imgEl.alt = 'Original design screenshot';
+            imgEl.src = img.src;
+            beforeWrap.appendChild(imgEl);
+        }
+
+        function buildAfterCanvas(img) {
+            afterWrap.innerHTML = '';
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            afterWrap.appendChild(canvas);
+            return canvas;
+        }
+
+        function applyAfterRendering() {
+            if (!state.image) return;
+            const canvas = afterWrap.querySelector('canvas') || buildAfterCanvas(state.image);
+            const ctx = canvas.getContext('2d');
+
+            const { brightness, contrast, saturate } = state.filter;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturate})`;
+            ctx.drawImage(state.image, 0, 0);
+            ctx.filter = 'none';
+            el('kpiApplied').textContent = summarizeApplied();
+        }
+
+        function summarizeApplied() {
+            const on = state.suggestions.filter(s => state.enabled.get(s.id));
+            if (!on.length) return 'None';
+            const names = on.slice(0, 3).map(s => s.title);
+            return on.length <= 3 ? names.join(', ') : `${names.join(', ')} +${on.length - 3} more`;
+        }
+
+        function updateKpis() {
+            if (!state.stats) return;
+            el('kpiRow').style.display = 'grid';
+            el('kpiBrightness').textContent = `${Math.round(state.stats.brightness * 100)}%`;
+            el('kpiContrast').textContent = `${Math.round(state.stats.contrast * 100)}%`;
+            el('kpiApplied').textContent = summarizeApplied();
+        }
+
+        function mergeChanges(suggestion, enabled) {
+            const ch = suggestion.changes || {};
+            if (ch.filter) {
+                const f = ch.filter;
+                state.filter = {
+                    brightness: enabled ? (state.filter.brightness * (f.brightness ?? 1)) : state.filter.brightness,
+                    contrast: enabled ? (state.filter.contrast * (f.contrast ?? 1)) : state.filter.contrast,
+                    saturate: enabled ? (state.filter.saturate * (f.saturate ?? 1)) : state.filter.saturate,
+                    sharpness: state.filter.sharpness
+                };
+            }
+            if (ch.ui && enabled) {
+                state.ui = { ...state.ui, ...ch.ui };
+            }
+        }
+
+        function recomputeAllChanges() {
+            state.filter = { brightness: 1, contrast: 1, saturate: 1, sharpness: 0 };
+            state.ui = { headlineScale: 1, bodyScale: 1, spacingScale: 1, ctaEmphasis: 0, minTap: 44, focusRing: true };
+            for (const s of state.suggestions) {
+                const on = !!state.enabled.get(s.id);
+                if (on) mergeChanges(s, true);
+            }
+            state.filter.brightness = clamp(state.filter.brightness, 0.82, 1.32);
+            state.filter.contrast = clamp(state.filter.contrast, 0.85, 1.45);
+            state.filter.saturate = clamp(state.filter.saturate, 0.85, 1.35);
+        }
+
+        function sugRow(s) {
+            const wrap = document.createElement('div');
+            wrap.className = 'sug';
+
+            const left = document.createElement('div');
+            const h = document.createElement('h3');
+            h.textContent = s.title;
+            const p = document.createElement('p');
+            p.textContent = s.reason;
+            left.appendChild(h);
+            left.appendChild(p);
+
+            const ctl = document.createElement('div');
+            ctl.className = 'ctl';
+            const tg = document.createElement('button');
+            tg.type = 'button';
+            tg.className = 'toggle';
+            tg.setAttribute('aria-label', `Toggle apply: ${s.title}`);
+            tg.dataset.on = state.enabled.get(s.id) ? '1' : '0';
+            const knob = document.createElement('span');
+            tg.appendChild(knob);
+
+            tg.addEventListener('click', () => {
+                const next = !state.enabled.get(s.id);
+                state.enabled.set(s.id, next);
+                tg.dataset.on = next ? '1' : '0';
+                recomputeAllChanges();
+                applyAfterRendering();
+                updateKpis();
+            });
+
+            ctl.appendChild(tg);
+            wrap.appendChild(left);
+            wrap.appendChild(ctl);
+
+            const vote = document.createElement('div');
+            vote.className = 'vote';
+            const up = document.createElement('button');
+            up.className = 'iconbtn';
+            up.type = 'button';
+            up.textContent = 'Helpful';
+            const down = document.createElement('button');
+            down.className = 'iconbtn';
+            down.type = 'button';
+            down.textContent = 'Not helpful';
+
+            const setVoteUi = (v) => {
+                up.dataset.on = v === 'up' ? '1' : '0';
+                down.dataset.on = v === 'down' ? '1' : '0';
+            };
+
+            up.addEventListener('click', async () => {
+                setVoteUi('up');
+                await sendFeedback(s.id, 'up');
+            });
+            down.addEventListener('click', async () => {
+                setVoteUi('down');
+                await sendFeedback(s.id, 'down');
+            });
+
+            vote.appendChild(up);
+            vote.appendChild(down);
+            left.appendChild(vote);
+
+            return wrap;
+        }
+
+        async function sendFeedback(suggestionId, rating) {
+            try {
+                const body = new URLSearchParams();
+                body.set('csrf', CSRF);
+                body.set('suggestionId', suggestionId);
+                body.set('rating', rating);
+                const res = await fetch('?action=feedback', { method: 'POST', body });
+                const json = await res.json();
+                if (!json.ok) throw new Error(json.error || 'Failed');
+            } catch {
+                showToast('Feedback failed to send');
+            }
+        }
+
+        function renderSuggestions(list) {
+            sugs.innerHTML = '';
+            if (!list.length) {
+                const div = document.createElement('div');
+                div.className = 'emptyState';
+                div.style.maxWidth = 'none';
+                div.style.textAlign = 'left';
+                div.textContent = 'No suggestions were generated.';
+                sugs.appendChild(div);
+                return;
+            }
+            for (const s of list) sugs.appendChild(sugRow(s));
+        }
+
+        async function analyze() {
+            analyzeBtn.disabled = true;
+            setStatus('Analyzing…');
+            try {
+                const goal = el('goal').value.trim();
+                const audience = el('audience').value.trim();
+                const style = el('style').value;
+                const cta = el('cta').value.trim();
+
+                const body = new URLSearchParams();
+                body.set('csrf', CSRF);
+                body.set('goal', goal);
+                body.set('audience', audience);
+                body.set('style', style);
+                body.set('cta', cta);
+                body.set('hasImage', state.image ? '1' : '0');
+                if (state.stats) {
+                    body.set('brightness', String(state.stats.brightness));
+                    body.set('contrast', String(state.stats.contrast));
+                }
+
+                const res = await fetch('?action=analyze', { method: 'POST', body });
+                const json = await res.json();
+                if (!json.ok) throw new Error(json.error || 'Analysis failed');
+
+                state.suggestions = json.suggestions || [];
+                state.enabled = new Map();
+                for (const s of state.suggestions) state.enabled.set(s.id, !!s.autoApply);
+                recomputeAllChanges();
+
+                renderSuggestions(state.suggestions);
+                if (state.image) {
+                    buildAfterCanvas(state.image);
+                    applyAfterRendering();
+                }
+                updateKpis();
+                setStatus('Ready');
+                showToast('Suggestions generated');
+            } catch {
+                setStatus('Error');
+                showToast('Analysis failed');
+            } finally {
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        function resetAll() {
+            el('goal').value = '';
+            el('audience').value = '';
+            el('cta').value = '';
+            el('style').value = 'Modern';
+            fileInput.value = '';
+            state.file = null;
+            state.image = null;
+            state.stats = null;
+            state.suggestions = [];
+            state.enabled = new Map();
+            state.filter = { brightness: 1, contrast: 1, saturate: 1, sharpness: 0 };
+            setStatus('Waiting');
+            sugs.innerHTML = '<div class="emptyState" style="max-width:none;text-align:left">Run analysis to generate contextual suggestions with explanations.</div>';
+            beforeWrap.innerHTML = '<div class="emptyState">Upload a screenshot to see true before/after. Without one, you can still generate suggestions and learn from them.</div>';
+            afterWrap.innerHTML = '<div class="emptyState">The improved preview appears here after you run analysis and apply changes.</div>';
+            el('kpiRow').style.display = 'none';
+            showToast('Reset');
+        }
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('Unsupported file type');
+                return;
+            }
+            state.file = file;
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.onload = () => {
+                state.image = img;
+                renderBefore(img);
+                state.stats = computeImageStats(img);
+                updateKpis();
+                showToast('Image loaded');
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        });
+
+        analyzeBtn.addEventListener('click', analyze);
+        resetBtn.addEventListener('click', resetAll);
+    </script>
+</body>
+</html>
